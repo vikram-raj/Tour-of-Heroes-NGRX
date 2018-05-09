@@ -15,13 +15,32 @@ import { HeroesComponent }      from './heroes/heroes.component';
 import { HeroSearchComponent }  from './hero-search/hero-search.component';
 import { MessagesComponent }    from './messages/messages.component';
 
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { HeroReducer } from './reducers/hero.reducer';
+import { initialState } from './states/hero.state';
+import { HeroEffects } from './effects/hero.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
-
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
+    StoreModule.forFeature('heroPage', {
+      heroes: HeroReducer
+    }, {
+      initialState: {
+        heroes: initialState
+      }
+    }),
+    EffectsModule.forFeature([HeroEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 10
+    }),
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
     // and returns simulated server responses.
     // Remove it when a real server is ready to receive requests.
